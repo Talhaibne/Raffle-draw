@@ -2,8 +2,10 @@ import { TicketManagement } from '@/components/raffle/TicketManagement';
 import { PrizeManagement } from '@/components/raffle/PrizeManagement';
 import { DrawExecution } from '@/components/raffle/DrawExecution';
 import { DrawHistory } from '@/components/raffle/DrawHistory';
+
 import { useRaffleState } from '@/hooks/useRaffleState';
 import { Button } from '@/components/ui/button';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,48 +17,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+
 import { RotateCcw } from 'lucide-react';
-import { TicketOwner } from '@/types/raffle';
 
-interface IndexProps {
-  getOwnerByTicket: (ticketNumber: string) => TicketOwner | undefined;
-  getAllTicketsFromOwners: () => string[];
-}
+const Index = () => {
+  const raffle = useRaffleState();
 
-const Index = ({ getOwnerByTicket, getAllTicketsFromOwners }: IndexProps) => {
-  const {
-    tickets,
-    prizes,
-    categories,
-    currentResults,
-    history,
-    isDrawing,
-    addTickets,
-    addTicketRange,
-    clearTickets,
-    addPrize,
-    addBulkPrizes,
-    updatePrize,
-    deletePrize,
-    addCategory,
-    deleteCategory,
-    getAvailablePrizes,
-    getPrizesByCategory,
-    executeDraw,
-    resetAll,
-    clearCurrentResults,
-  } = useRaffleState();
+  // ✅ MUST return string[]
+  const handleImportFromOwners = (): string[] => {
+    return raffle.getAllTicketsFromOwners();
+  };
 
   return (
-    <div className="bg-background p-6">
+    <div className="bg-background p-6 space-y-6">
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Raffle Draw</h1>
           <p className="text-sm text-muted-foreground">
             Fair • Transparent • Exciting
           </p>
         </div>
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" size="sm">
@@ -64,6 +47,7 @@ const Index = ({ getOwnerByTicket, getAllTicketsFromOwners }: IndexProps) => {
               Reset All
             </Button>
           </AlertDialogTrigger>
+
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Reset Everything?</AlertDialogTitle>
@@ -71,9 +55,13 @@ const Index = ({ getOwnerByTicket, getAllTicketsFromOwners }: IndexProps) => {
                 This will clear all tickets, prizes, and draw history. This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
+
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={resetAll} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              <AlertDialogAction
+                onClick={raffle.resetAll}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
                 Reset All
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -83,50 +71,54 @@ const Index = ({ getOwnerByTicket, getAllTicketsFromOwners }: IndexProps) => {
 
       {/* Main Content */}
       <div className="space-y-6">
-        {/* Top Row - Management Sections */}
+
+        {/* Management */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <TicketManagement
-            tickets={tickets}
-            onAddTickets={addTickets}
-            onAddRange={addTicketRange}
-            onClearTickets={clearTickets}
-            onImportFromOwners={getAllTicketsFromOwners}
+            tickets={raffle.tickets}
+            onAddTickets={raffle.addTickets}
+            onAddRange={raffle.addTicketRange}
+            onClearTickets={raffle.clearTickets}
+            onImportFromOwners={handleImportFromOwners}
           />
+
           <PrizeManagement
-            prizes={prizes}
-            categories={categories}
-            onAddPrize={addPrize}
-            onAddBulkPrizes={addBulkPrizes}
-            onUpdatePrize={updatePrize}
-            onDeletePrize={deletePrize}
-            onAddCategory={addCategory}
-            onDeleteCategory={deleteCategory}
-            getPrizesByCategory={getPrizesByCategory}
+            prizes={raffle.prizes}
+            categories={raffle.categories}
+            onAddPrize={raffle.addPrize}
+            onAddBulkPrizes={raffle.addBulkPrizes}
+            onUpdatePrize={raffle.updatePrize}
+            onDeletePrize={raffle.deletePrize}
+            onAddCategory={raffle.addCategory}
+            onDeleteCategory={raffle.deleteCategory}
+            getPrizesByCategory={raffle.getPrizesByCategory}
           />
         </div>
 
-        {/* Bottom Row - Draw and History */}
+        {/* Draw & History */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <DrawExecution
-              tickets={tickets}
-              categories={categories}
-              getAvailablePrizes={getAvailablePrizes}
-              isDrawing={isDrawing}
-              currentResults={currentResults}
-              onExecuteDraw={executeDraw}
-              onClearResults={clearCurrentResults}
-              getOwnerByTicket={getOwnerByTicket}
+              tickets={raffle.tickets}
+              categories={raffle.categories}
+              getAvailablePrizes={raffle.getAvailablePrizes}
+              isDrawing={raffle.isDrawing}
+              currentResults={raffle.currentResults}
+              onExecuteDraw={raffle.executeDraw}
+              onClearResults={raffle.clearCurrentResults}
+              getOwnerByTicket={raffle.getOwnerByTicket}
             />
           </div>
+
           <div className="lg:col-span-1">
             <DrawHistory
-              history={history}
-              onReset={resetAll}
-              getOwnerByTicket={getOwnerByTicket}
+              history={raffle.history}
+              onReset={raffle.resetAll}
+              getOwnerByTicket={raffle.getOwnerByTicket}
             />
           </div>
         </div>
+
       </div>
     </div>
   );
