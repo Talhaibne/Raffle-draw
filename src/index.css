@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 220 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 25% 10%;
+
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 220 15% 92%;
+    --accent-foreground: 220 25% 10%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 70% 50%;
+
+    --radius: 0.625rem;
+
+    /* Category colors */
+    --category-a: 142 70% 45%;
+    --category-a-foreground: 0 0% 100%;
+    --category-b: 38 92% 50%;
+    --category-b-foreground: 0 0% 100%;
+    --category-c: 280 65% 55%;
+    --category-c-foreground: 0 0% 100%;
+
+    /* Winner highlight */
+    --winner: 45 93% 47%;
+    --winner-foreground: 0 0% 10%;
+    --winner-glow: 45 93% 60%;
+
+    /* Success color */
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 220 70% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 220 15% 95%;
+
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 220 20% 18%;
+    --accent-foreground: 220 15% 95%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 220 70% 55%;
+
+    /* Category colors - slightly adjusted for dark mode */
+    --category-a: 142 65% 50%;
+    --category-a-foreground: 0 0% 100%;
+    --category-b: 38 85% 55%;
+    --category-b-foreground: 0 0% 10%;
+    --category-c: 280 60% 60%;
+    --category-c-foreground: 0 0% 100%;
+
+    /* Winner highlight */
+    --winner: 45 93% 50%;
+    --winner-foreground: 0 0% 10%;
+    --winner-glow: 45 93% 65%;
+
+    /* Success color */
+    --success: 142 65% 50%;
+    --success-foreground: 0 0% 100%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer components {
+  .winner-card {
+    @apply relative overflow-hidden;
+    animation: winner-pulse 2s ease-in-out infinite;
+  }
+
+  .winner-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-30;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      hsl(var(--winner-glow)) 50%,
+      transparent 70%
+    );
+    animation: shimmer 2s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .shuffle-animation {
+    animation: shuffle 0.1s ease-in-out infinite;
+  }
+}
+
+@keyframes winner-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--winner) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(var(--winner) / 0.5);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes shuffle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  75% {
+    transform: translateY(2px);
+  }
+}
